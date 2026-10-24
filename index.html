@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2a2018">
+<title>魔法の町のなんでも屋</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <!-- 舞台 -->
+  <div id="stage">
+    <div id="bg"></div>
+    <div id="tint"></div>
+    <div id="deco"></div>
+    <div id="chars"></div>
+    <div id="spots"></div>
+  </div>
+
+  <!-- 上部バー -->
+  <div id="topbar" class="hidden">
+    <div id="clock"></div>
+    <div id="locname"></div>
+    <div class="topbtns">
+      <button id="btnBag" aria-label="持ち物">🎒</button>
+      <button id="btnNote" aria-label="手帳">📖</button>
+      <button id="btnSet" aria-label="設定">⚙</button>
+    </div>
+  </div>
+  <div id="objective" class="hidden"></div>
+
+  <!-- 下部の行動ボタン -->
+  <div id="actions" class="hidden"></div>
+
+  <!-- 会話 -->
+  <div id="choices" class="hidden"></div>
+  <div id="dialog" class="hidden">
+    <div id="dlgFace"></div>
+    <div id="dlgBody">
+      <div id="dlgName"></div>
+      <div id="dlgText"></div>
+    </div>
+    <div id="dlgNext">▼</div>
+    <div id="dlgTools">
+      <button id="btnLog">ログ</button>
+      <button id="btnAuto">オート</button>
+      <button id="btnSkip">スキップ</button>
+    </div>
+  </div>
+
+  <!-- 町マップ -->
+  <div id="map" class="hidden">
+    <div id="mapScroll"><div id="mapInner"><img id="mapImg" src="img/map.jpg" alt="ひなたまちの地図"><div id="mapTint"></div><div id="mapPins"></div></div></div>
+    <button id="mapClose">✕ とじる</button>
+  </div>
+
+  <!-- タイトル -->
+  <div id="title" class="hidden">
+    <div class="tbg"></div>
+    <div class="tglow"></div>
+    <img class="tshiki" src="img/st_shiki_full.png" alt="">
+    <img class="thero" src="img/st_hero_full.png" alt="">
+    <div class="tlogo">
+      <div class="tsub">ひなたまち・なんでも屋「ほしや」</div>
+      <h1>魔法の町の<br>なんでも屋</h1>
+    </div>
+    <div class="tmenu">
+      <button id="tNew">はじめから</button>
+      <button id="tCont">つづきから</button>
+      <button id="tAlbum">結末アルバム</button>
+      <button id="tSet">設定</button>
+    </div>
+    <div class="tver">v1（序盤）</div>
+  </div>
+
+  <div id="modal" class="hidden"><div id="modalBox"></div></div>
+  <div id="popup" class="hidden"><div id="popupBox"></div></div>
+  <div id="toast"></div>
+  <div id="fade"></div>
+</div>
+
+<script src="js/engine.js"></script>
+<script src="js/data-world.js"></script>
+<script src="js/scenario-early.js"></script>
+<script>Game.boot();</script>
+</body>
+</html>
