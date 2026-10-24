@@ -27,7 +27,7 @@ SCENES.eat_tokubetsupan = [
 const MID = ['q6', 'q7', 'q8', 'q9', 'q10'];
 function emptyBoxMsg(S) {
   if (S.f.v2end) return 'いまは新しい依頼の紙は入っていない。<br>（終盤の依頼11〜15は、次の更新で追加予定です）';
-  if (S.f.v1end && !S.f.midStart) return 'いまは依頼の紙が入っていない。<br>今日はのんびり過ごして、明日を待とう。';
+  if (S.f.v1end && !S.f.midStart) return 'いまは依頼の紙が入っていない。<br>今日は「🌙 おやすみ」して、明日を待とう。';
   return 'いまは依頼の紙が入っていない。';
 }
 // 中盤の報告のあと：全部終わっていれば中盤のしめくくりへ
@@ -36,13 +36,19 @@ SCENES.after_mid = S => [{ go: MID.every(done) ? 'v2_end' : 'after_quest' }];
 /* ---------- 中盤のはじまり（序盤を終えた次の朝） ---------- */
 HOOKS.push({
   morningPre(S) {
-    if (S.f.v1end && !S.f.midStart) return [
-      { fade: 'それから、数日が過ぎた', then: S => { S.day += 3; } },
-      { set: { midStart: true } },
-      { n: '町の人に道を聞かれたり、ちょっとした荷物を運んだり。小さな手伝いをしながら、数日が過ぎた。' },
-    ];
+    if (S.f.v1end && !S.f.midStart) return MID_START;
+  },
+  // 序盤を終えたあと、前の版のまま朝を迎えていたセーブは、店に入ったときに中盤を始める
+  enter(loc, S) {
+    if (loc === 'shop' && S.f.v1end && !S.f.midStart && S.time < 3 && !S.active) return 'mid_catchup';
   },
 });
+const MID_START = [
+  { fade: 'それから、数日が過ぎた', then: S => { S.day += 3; } },
+  { set: { midStart: true } },
+  { n: '町の人に道を聞かれたり、ちょっとした荷物を運んだり。小さな手伝いをしながら、数日が過ぎた。' },
+];
+SCENES.mid_catchup = MID_START.concat([{ say: 'shiki', t: '依頼箱に、見覚えのある字の紙が入っているよ' }]);
 
 /* ---------- 精霊の住まい（依頼6のあと） ---------- */
 const HOME_LOC = { hana: 'hana', shop: 'backroom', view: 'view' };
