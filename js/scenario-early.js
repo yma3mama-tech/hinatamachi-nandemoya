@@ -5,7 +5,7 @@
 
 /* ---------- 小道具 ---------- */
 // 依頼に関係する住人の「話す」を、依頼用の会話に差しかえる
-function talkFor(list, id, scene) { return list.map(n => n.id === id ? Object.assign({}, n, { talk: scene, label: '💬 用事' }) : n); }
+function talkFor(list, id, scene) { return list.map(n => n.id === id ? Object.assign({}, n, { talk: scene, label: '💬 ' + (n.label && n.label !== '話す' ? n.label : '用事') }) : n); }
 // 依頼用の調べる所を足す（同じidがあれば差しかえる）
 function spotFor(list, s) { return list.filter(x => x.id !== s.id).concat([Object.assign({ key: true }, s)]); }
 const objNow = (t, at) => S => { S.obj = t; S.objAt = at || null; renderTop(); };

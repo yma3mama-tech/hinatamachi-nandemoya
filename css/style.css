@@ -40,6 +40,7 @@ body.big{--fs:20px}
 #tint.t1{background:transparent}
 #tint.t2{background:linear-gradient(rgba(255,150,80,.55),rgba(255,190,130,.35))}
 #tint.t3{background:linear-gradient(rgba(40,50,120,.82),rgba(25,30,80,.88))}
+#tint.t3.bright{background:linear-gradient(rgba(70,80,150,.66),rgba(55,60,120,.74))}
 #tint.in3{background:radial-gradient(ellipse at 50% 35%,rgba(255,200,130,.25),rgba(70,45,30,.75))}
 #tint.in2{background:linear-gradient(rgba(255,170,110,.35),rgba(255,200,150,.2))}
 #deco{position:absolute;inset:0;pointer-events:none}
@@ -238,6 +239,12 @@ body.busy #objective{opacity:.0;pointer-events:none}
 .log p{margin:0 0 10px;font-size:14px;line-height:1.7}
 .log b{color:var(--accent)}
 .log .ch{color:#6f8a5a}
+.album .end{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:10px;background:#fffaf0}
+.album .end b{display:block;font-size:15px}
+.album .end span{font-size:13px;color:var(--ink-soft)}
+.album .end.no{background:#efe6d4;color:#b8a888}
+.credits{line-height:2;font-size:14px}
+.credits h3{margin:0 0 8px;font-size:18px;letter-spacing:.1em}
 
 /* ---------- ポップアップ ---------- */
 #popup{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;background:rgba(20,14,8,.35);cursor:pointer}

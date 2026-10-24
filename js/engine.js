@@ -240,7 +240,7 @@ async function play(id) {
 async function seq(list) {
   for (const c of list) {
     if (!c) continue;
-    if (typeof c === 'function') { const r = c(S); if (typeof r === 'string') return r; continue; }
+    if (typeof c === 'function') { let r = c(S); if (r && typeof r.then === 'function') r = await r; if (typeof r === 'string') return r; continue; }
     if (c.say !== undefined || c.n !== undefined) { await line(c); continue; }
     if (c.choice) {
       const opts = c.choice.filter(o => !o.if || o.if(S));
@@ -339,7 +339,7 @@ function renderBg() {
     bg.style.backgroundSize = `${bw}px ${bh}px`; bg.style.backgroundPosition = `${x}px ${y}px`;
   }
   const t = $('#tint'); const indoor = L.indoor && !(sceneBg && !sceneBg.startsWith('img:'));
-  t.className = indoor ? (S.time === 3 ? 'in3' : S.time === 2 ? 'in2' : '') : 't' + S.time;
+  t.className = indoor ? (S.time === 3 ? 'in3' : S.time === 2 ? 'in2' : '') : 't' + S.time + (S.time === 3 && S.f.nightBright ? ' bright' : '');
   if (key === 'basement' || key === 'black') t.className = '';
   // 夜の明かり
   const deco = $('#deco'); deco.innerHTML = '';
@@ -680,7 +680,7 @@ function boot() {
   $('#tNew').onclick = startNew;
   $('#tCont').onclick = continueGame;
   $('#tSet').onclick = () => openSettings(true);
-  $('#tAlbum').onclick = () => toast('結末アルバムは、エンディングを見ると増えていきます');
+  $('#tAlbum').onclick = () => { if (typeof openAlbum === 'function') openAlbum(); else toast('結末アルバムは、エンディングを見ると増えていきます'); };
   window.addEventListener('resize', () => { if (S) renderBg(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
   showTitle();
