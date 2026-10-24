@@ -80,6 +80,9 @@ const SE = {
   bell: () => [1568, 2093].forEach((f, i) => tone(f, .9, 'sine', .08, i * .15)),
   night: () => [523, 659, 784].forEach((f, i) => tone(f, .7, 'sine', .07, i * .2)),
   paper: () => tone(1200, .05, 'triangle', .05),
+  flute: () => [784, 880, 988, 1175, 988, 880, 784].forEach((f, i) => tone(f, .42, 'sine', .09, i * .32)),
+  knock: () => [0, .18].forEach(d => tone(140, .09, 'square', .07, d)),
+  rain: () => { for (let i = 0; i < 14; i++) tone(1800 + Math.random() * 1600, .05, 'triangle', .025, i * .09 + Math.random() * .05); },
 };
 function se(name) { try { SE[name] && SE[name](); } catch (e) { } }
 
@@ -469,7 +472,7 @@ function questState(q) {
 function openRequests() {
   const list = QUESTS.filter(q => ['active', 'open'].includes(questState(q)));
   let html = '<h2>📮 依頼箱</h2>';
-  if (!list.length) html += `<div class="empty">${S.f.v1end ? 'いまは新しい依頼の紙は入っていない。<br>（中盤の依頼は次の更新で追加予定です）' : 'いまは依頼の紙が入っていない。'}</div>`;
+  if (!list.length) html += `<div class="empty">${typeof emptyBoxMsg === 'function' ? emptyBoxMsg(S) : 'いまは依頼の紙が入っていない。'}</div>`;
   list.sort((a, b) => (questState(b) === 'active') - (questState(a) === 'active') || a.no - b.no);
   for (const q of list) {
     const st = questState(q), w = q.when ? q.when(S) : { ok: true };
@@ -536,6 +539,8 @@ function workbench(cfg) {
   return new Promise(res => {
     const filled = {};
     const missing = cfg.needs.filter(id => !has(id));
+    // ロキにもらった小さな道具があると、はめこみが1手へる
+    if (S.f.goodTool && !missing.length && cfg.needs.length > 1) filled[cfg.needs[0]] = true;
     if (missing.length) {
       toast((cfg.hint || '材料が足りないみたい。') + '\n足りない物：' + missing.map(id => ITEMS[id].name).join('、'), 3600);
       res(false); return;

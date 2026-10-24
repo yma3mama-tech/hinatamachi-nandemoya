@@ -117,8 +117,8 @@ LOCS = {
     name: 'ほしや・奥の部屋', bg: 'img:bg_backroom.jpg', indoor: true, parent: 'shop',
     npcs: () => [],
     actions: S => [
-      { t: '🛠 作業台', fn: () => play(benchScene()), hl: S.objAt === 'backroom' },
-      { t: '🗄 特別な引き出し', fn: () => play('drawer') },
+      { t: '🛠 作業台', fn: () => play(benchScene()), hl: S.objAt === 'backroom' && !/引き出し/.test(S.obj) },
+      { t: '🗄 特別な引き出し', fn: () => play('drawer'), hl: S.objAt === 'backroom' && /引き出し/.test(S.obj) },
       { t: '⬅ 店にもどる', fn: () => moveTo('shop') },
     ],
   },
@@ -261,8 +261,7 @@ SCENES.rest = S => {
     { fade: true, then: S => { S.time += 1; } },
     { say: 'shiki', f: 'a', t: pick(['いい顔になったね。少し休むのも仕事のうちだよ', 'お茶が冷めないうちに、と思ったら、もう冷めていたよ', '窓の外、だいぶ日が傾いてきたね']) },
   ] });
-  if (has('pan')) opts.push({ t: '焼きたてパンを食べる', go: 'eat_pan' });
-  if (has('amapan')) opts.push({ t: 'ココ特製の甘いパンを食べる', go: 'eat_amapan' });
+  for (const id of Object.keys(S.items)) if (SCENES['eat_' + id]) opts.push({ t: ITEMS[id].name + 'を食べる', go: 'eat_' + id });
   if (has('hanataba') && !S.f.bouquetShown) opts.push({ t: '花束をカウンターに飾る', do: [
     { take: 'hanataba' }, { set: { bouquetShown: true } },
     { n: 'カウンターの端に花を活けると、店の中がぱっと明るくなった。' },
@@ -293,6 +292,7 @@ SCENES.sleep = S => {
 };
 SCENES.morning = S => {
   const l = [];
+  for (const h of HOOKS) if (h.morningPre) { const x = h.morningPre(S); if (x) l.push(...x); }
   const fresh = QUESTS.some(q => questState(q) === 'open');
   l.push(pick([
     { say: 'shiki', f: 'a', t: 'おはよう。よく眠れたかい' },
@@ -302,6 +302,7 @@ SCENES.morning = S => {
   if (S.f.chibiVisits && S.day % 2 === 0) l.push({ se: 'meow' }, { n: '窓辺で、チビが丸くなっている。いつのまに来たんだろう。' });
   if (S.active) l.push({ say: 'shiki', t: '昨日の依頼の続きだね。焦らなくていいよ' });
   else if (fresh) l.push({ say: 'shiki', t: '依頼箱に紙が入っているよ。気が向いたら見てごらん' });
+  for (const h of HOOKS) if (h.morning) { const x = h.morning(S); if (x) l.push(...x); }
   return l;
 };
 SCENES.after_quest = S => [
